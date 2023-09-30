@@ -3,29 +3,43 @@ import { useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import auth from "../../firebase/firebase.config";
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai';
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(null);
 
   const handleRegister = (e) => {
     e.preventDefault();
     setError(null);
+    setSuccess(false);
 
     const email = e.target.email.value;
     const password = e.target.password.value;
+    const checked = e.target.terms.checked;
 
-    if (email === "") {
+    if (email === "" && password === "") {
+      setError("All fields are required!");
+      return;
+    }
+    else if (email === "") {
       setError("Email field can not be empty!");
       return;
     }
     else if (password === "") {
       setError("Password field can not be empty!");
       return;
+    } else if (!checked) {
+      setError("Terms and Conditions must be accepted!");
+      return;
     }
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then(result => console.log(result))
+      .then(result => {
+        setSuccess(true);
+        console.log(result.user);
+      })
       .catch(error => console.error("Error: ", error))
   }
 
@@ -38,8 +52,15 @@ const Register = () => {
         <div className="shadow-md rounded-md p-5">
           <h2 className="text-3xl font-semibold text-center">Register Here</h2>
           {
-            error && <div className="my-5">
-              <p className="text-center text-red-500">{error}</p>
+            // Error Message
+            error && <div className="w-4/5 md:w-1/2 mx-auto my-5">
+              <p className="text-center text-red-500 font-medium"><span className="font-bold">Error:</span> {error}</p>
+            </div>
+          }
+          {
+            // Success Message
+            success && <div className="w-4/5 md:w-1/2 mx-auto my-5">
+              <p className="text-center text-green-500 font-medium">Registration successful. Please <Link to="/login"><span className="underline font-bold text-primary">Login here</span></Link> to get access.</p>
             </div>
           }
           <form onSubmit={handleRegister}>
@@ -54,8 +75,15 @@ const Register = () => {
                 }
               </span>
             </div>
+            <div className="mt-5 relative w-4/5 md:w-1/2 mx-auto">
+              <input type="checkbox" name="terms" id="terms" className="mr-2" />
+              <label htmlFor="terms" className="font-medium">Accept Terms and Conditions</label>
+            </div>
             <div className="text-center w-4/5 md:w-1/2 mx-auto mt-5">
               <input type="submit" value="Register" className="btn btn-primary text-white rounded w-full" />
+            </div>
+            <div className="text-center w-4/5 md:w-1/2 mx-auto mt-10">
+              <p className="text-left">- Already have an account? Please <span className="font-medium text-primary underline"><Link to="/login">Login here</Link></span>.</p>
             </div>
           </form>
         </div>

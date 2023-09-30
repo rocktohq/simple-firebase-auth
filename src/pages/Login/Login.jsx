@@ -27,7 +27,7 @@ const Login = () => {
     }
 
     signInWithEmailAndPassword(auth, email, password)
-      .then(resutl => console.log(resutl))
+      .then(resutl => console.log(resutl.user))
       .catch(error => console.error("Error: ", error))
   }
 
