@@ -56,8 +56,8 @@ const Login = () => {
                 }
               </span>
             </div>
-            <div className="text-center mt-5">
-              <input type="submit" value="Login" className="btn btn-primary text-white rounded" />
+            <div className="text-center w-4/5 md:w-1/2 mx-auto mt-5">
+              <input type="submit" value="Login" className="btn btn-primary text-white rounded w-full" />
             </div>
           </form>
         </div>
