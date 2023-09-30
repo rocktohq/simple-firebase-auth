@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import auth from "../../firebase/firebase.config";
@@ -30,8 +30,17 @@ const Register = () => {
     else if (password === "") {
       setError("Password field can not be empty!");
       return;
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+      setError("Please provide an valid email!");
+      return;
+    } else if (password.length < 6) {
+      setError("Password at least 6 characters long!");
+      return;
+    } else if (!/[A-Z]/.test(password)) {
+      setError("Password must have an uppercase letter!");
+      return;
     } else if (!checked) {
-      setError("Terms and Conditions must be accepted!");
+      setError("Terms and conditions must be accepted!");
       return;
     }
 
@@ -39,6 +48,10 @@ const Register = () => {
       .then(result => {
         setSuccess(true);
         console.log(result.user);
+        sendEmailVerification(result.user)
+          .then(() => {
+            alert("Check email and verify your email.")
+          })
       })
       .catch(error => console.error("Error: ", error))
   }
