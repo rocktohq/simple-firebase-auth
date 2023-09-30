@@ -1,13 +1,14 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { FacebookAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import auth from './../../firebase/firebase.config';
 import { useState } from "react";
-import { AiFillGoogleCircle } from "react-icons/ai";
+import { AiFillFacebook, AiFillGoogleCircle } from "react-icons/ai";
 
 
 const Home = () => {
 
-  const googleProvider = new GoogleAuthProvider;
+  const googleProvider = new GoogleAuthProvider();
+  const facebookProvider = new FacebookAuthProvider();
   const [user, setUser] = useState(null);
 
   const handleGoogleLogin = () => {
@@ -17,6 +18,17 @@ const Home = () => {
       })
       .catch(error => console.error(error))
   }
+
+  const handleFacebookLogin = () => {
+    signInWithPopup(auth, facebookProvider)
+      .then(result => {
+        console.log(result)
+      })
+      .then(error => {
+        console.log(error.message)
+      })
+  }
+
   console.log(user)
 
   return (
@@ -39,8 +51,9 @@ const Home = () => {
                   }
                 </div>
               </div>)
-              : (<div className="text-center">
+              : (<div className="flex flex-col md:flex-row justify-center items-center gap-5">
                 <button onClick={handleGoogleLogin} className="btn btn-primary text-white"><AiFillGoogleCircle className="text-2xl"></AiFillGoogleCircle>Login with Google</button>
+                <button onClick={handleFacebookLogin} className="btn btn-primary text-white"><AiFillFacebook className="text-2xl"></AiFillFacebook>Login with Facebook</button>
               </div>)
           }
         </div>
