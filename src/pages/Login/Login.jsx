@@ -1,9 +1,9 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-// import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import auth from "../../firebase/firebase.config";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [error, setError] = useState(null);
@@ -28,7 +28,7 @@ const Login = () => {
 
     signInWithEmailAndPassword(auth, email, password)
       .then(resutl => console.log(resutl.user))
-      .catch(error => console.error("Error: ", error))
+      .catch(error => console.error("Error: ", error.message))
   }
 
   return (
@@ -58,6 +58,10 @@ const Login = () => {
             </div>
             <div className="text-center w-4/5 md:w-1/2 mx-auto mt-5">
               <input type="submit" value="Login" className="btn btn-primary text-white rounded w-full" />
+            </div>
+            <div className="text-center w-4/5 md:w-1/2 mx-auto mt-10">
+              <p className="text-left">- Dont have an account? Please <span className="font-medium text-primary underline"><Link to="/register">Create one</Link></span>!</p>
+              <p className="text-left">- Forgot password? <span className="font-medium text-primary underline"><Link to="/forgotpassword">Reset now</Link></span>!</p>
             </div>
           </form>
         </div>

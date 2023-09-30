@@ -53,7 +53,7 @@ const Register = () => {
             alert("Check email and verify your email.")
           })
       })
-      .catch(error => console.error("Error: ", error))
+      .catch(error => console.error("Error: ", error.message))
   }
 
   return (
